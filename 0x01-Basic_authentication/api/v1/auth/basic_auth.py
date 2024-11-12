@@ -22,9 +22,9 @@ class BasicAuth(Auth):
         """
         if authorization_header is None:
             return None
-        if not isinstance(authorizatin_header, str):
+        if not isinstance(authorization_header, str):
             return None
-        if not authorization_header.startswith("Basic ")
+        if not authorization_header.startswith("Basic "):
             return None
         header_array = authorization_header.split(" ")
         if header_array[0] != "Basic":
@@ -46,7 +46,7 @@ class BasicAuth(Auth):
             except binascii.Error:
                 return None
 
-    def extract_user_credentials(self, decoded_base64_authorization_header: str) -> (str, str)
+    def extract_user_credentials(self, decoded_base64_authorization_header: str) -> (str, str):
         """
         returns the user emal and password from the Base64 decoded val
         """
@@ -54,7 +54,7 @@ class BasicAuth(Auth):
         if (decoded and isinstance(decoded, str) and ":" in decoded):
             req = decoded.split(":", 1)
             return (req[0], req[1])
-         return (None, None)
+        return (None, None)
 
 
     def user_object_from_credentials(self, user_email: str, user_pwd: str) -> TypeVar('User'):

@@ -15,7 +15,7 @@ class Auth:
         To be inmplemented
         """
         if not path or not excluded_paths:
-            retrun True
+            return True
         
         return True
 
