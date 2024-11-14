@@ -18,6 +18,15 @@ if os.getenv("AUTH_TYPE"):
     if os.getenv("AUTH_TYPE") == "basic_auth":
         from .auth.basic_auth import BasicAuth
         auth = BasicAuth()
+    elif os.getenv("AUTH_TYPE") == "session_auth":
+        from .auth.session_auth import SessionAuth
+        auth = SessionAuth()
+    elif os.getenv("AUTH_TYPE") == "session_exp_auth":
+        from .auth.session_exp_auth import SessionExpAuth
+        auth = SessionExpAuth()
+    elif os.getenv("AUTH_TYPE") == "session_db_auth":
+        from .auth.session_db_auth import SessionDBAuth
+        auth = SessionDBAuth()
     else:
         from .auth.auth import Auth
         auth = Auth()
@@ -44,13 +53,14 @@ def forbidden(error) -> str:
 def before_request():
     """
     """
-    authorized_list = ['/api/v1/status', '/api/v1/unauthorized', '/api/v1/forbidden']
+    authorized_list = ['/api/v1/status', '/api/v1/unauthorized', '/api/v1/forbidden', '/api/v1/auth_session/login/']
 
     if auth and auth.require_auth(request.path, authorized_list):
-        if not auth.authorized_header(request):
+        if not auth.authorized_header(request) and not auth.session_cookie(request):
             abort(401)
         if not auth.current_user(request):
             abort(403)
+        request.current_user = auth.current_user(request)
 
 if __name__ == "__main__":
     host = getenv("API_HOST", "0.0.0.0")
